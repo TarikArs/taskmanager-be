@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
-    protected $connection = 'mongodb';
     protected $collection = 'tasks';
+    protected $fillable = ['title', 'description', 'status'];
+
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Task;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,15 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    /** check if mongodb functional */
-
-    // $collection = (new MongoDB\Client)->test->users;
-
-
-
-    Task::create([
-        'title' => 'Task 1',
-        'description' => 'Description 1',
-        'status' => 'pending',
-    ]);
 });
+Route::resources([
+    'tasks' => TaskController::class,
+]);
