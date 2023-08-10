@@ -8,10 +8,10 @@ use App\Models\Task;
 class TaskRepository implements TaskRepositoryInterface
 {
 
-    public function getAll()
+    public function getAll($owner_id)
     {
 
-        return Task::all();
+        return Task::where('owner_id', $owner_id)->get();
     }
 
     public function getById($id)
@@ -27,13 +27,16 @@ class TaskRepository implements TaskRepositoryInterface
     public function update($id, $input)
     {
         $task = Task::find($id);
-        $task->fill($input);
-        $task->save();
+        if ($task)
+            return $task->update($input);
+        throw new \Exception("Task not found");
     }
 
     public function delete($id)
     {
         $task = Task::find($id);
-        $task->delete();
+        if ($task)
+           return $task->delete();
+        throw new \Exception("Task not found");
     }
 }

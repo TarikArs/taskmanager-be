@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("title", 255);
             $table->text("description");
             $table->string("status", 255);
+            $table->unsignedBigInteger("owner_id");
             $table->timestamps();
         });
     }

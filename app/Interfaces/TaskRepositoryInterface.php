@@ -9,7 +9,7 @@ interface TaskRepositoryInterface
      *
      * @return mixed
      */
-    public function getAll();
+    public function getAll($owner_id);
 
     /**
      * Get a task by ID.

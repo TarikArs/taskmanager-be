@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class Task extends Model
+class Task extends Eloquent
 {
-    use HasFactory;
-    protected $collection = 'tasks';
-    protected $fillable = ['title', 'description', 'status'];
+    protected $connection = 'mongodb'; 
+    protected $collection = 'tasks';  
 
-
+    protected $fillable = ['title', 'description', 'status', 'owner_id'];
 }

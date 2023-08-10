@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Task;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TaskRequest extends FormRequest
 {
@@ -41,4 +44,22 @@ class TaskRequest extends FormRequest
             'status.integer' => 'The status field must be integer.',
         ];
     }
+    public function attributes()
+    {
+        return [
+            'title' => 'Title',
+            'description' => 'Description',
+            'status' => 'Status',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json(['errors' => $validator->errors()], 422)
+        );
+    }
+   
+
+    
 }
