@@ -11,4 +11,3 @@
 6- run the command `php artisan jwt:secret` to generate the jwt secret key
 7- run the command `php artisan migrate --seed` to migrate the database and seed it with the default data
 8- run the command `php artisan serve` to start the server
-
