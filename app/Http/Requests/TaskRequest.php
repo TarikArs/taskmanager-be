@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Task;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -27,7 +26,7 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|unique:tasks|max:255',
             'description' => 'nullable|string',
             'status' => 'required|integer|between:0,2',
 
@@ -37,6 +36,7 @@ class TaskRequest extends FormRequest
     {
         return [
             'title.required' => 'The title field is required.',
+            'title.unique' => 'The title field must be unique.',
             'title.string' => 'The title field must be string.',
             'title.max' => 'The title field must be less than 255 characters.',
             'description.string' => 'The description field must be string.',

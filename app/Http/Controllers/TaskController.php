@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
 use App\Interfaces\TaskRepositoryInterface;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
-
     protected $taskRepository;
 
     public function __construct(TaskRepositoryInterface $taskRepository)
@@ -15,45 +17,50 @@ class TaskController extends Controller
         $this->taskRepository = $taskRepository;
     }
 
-    public function index()
+    protected function handleException(\Exception $e): JsonResponse
+    {
+        return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    public function index(): JsonResponse
     {
         try {
             $owner_id = auth()->user()->id;
             $tasks = $this->taskRepository->getAll($owner_id);
-            return response()->json($tasks, 200);
+            return response()->json($tasks, Response::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return $this->handleException($e);
         }
     }
 
-    public function store(TaskRequest $request)
+    public function store(TaskRequest $request): JsonResponse
     {
         try {
             $request->merge(['owner_id' => auth()->user()->id]);
             $task = $this->taskRepository->create($request->all());
-            return response()->json($task, 201);
+            return response()->json($task, Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return $this->handleException($e);
         }
     }
 
-    public function update(TaskRequest $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         try {
-            $task = $this->taskRepository->update($id,$request->all());
-            return response()->json($task, 200);
+            $task = $this->taskRepository->update($id, $request->all());
+            return response()->json($task, Response::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return $this->handleException($e);
         }
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         try {
             $this->taskRepository->delete($id);
-            return response()->json(['message' => 'Task deleted successfully'], 200);
+            return response()->json(['message' => 'Task deleted successfully'], Response::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
+            return $this->handleException($e);
         }
     }
 }
